@@ -8,6 +8,8 @@ $(function () {
         color: 'black'
     }
     var drawing = false
+    var colorBtn = $('#color-btn')
+    var clearBtn = $('#clear-btn')
 
     function drawLine(x0, y0, x1, y1, color, syncStream) {
         context.beginPath()
@@ -91,4 +93,28 @@ $(function () {
             }
         }) 
     })
-})
+
+    function throttle(callback, delay) {
+        var previousCall = new Date().getTime()
+        return function() {
+            var time = new Date().getTime()
+            if((time - previousCall) >= delay) {
+                previousCall = time
+                callback.apply(null, arguments)
+            }
+        }
+    }
+    canvas.addEventListener('mousemove', throttle(onMouseMove, 10))
+
+    function changeColor() {
+        current.color = '#' + Math.floor(Math.random() * 16777215).toString(16)
+        colorBtn.css('border', '5px solid ' + current.color)
+    }
+
+    function clearBoard() {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+    }
+
+    colorBtn.on('click', changeColor)
+    clearBtn.on('click', clearBoard)
+});
