@@ -16,5 +16,39 @@ $(function () {
         context.closePath()
     }
 
+    function onMouseDown(e) {
+        drawing = true
+        current.x = e.clientX
+        current.y = e.clientY
+    }
 
+    function onMouseUp(e) {
+        if(!drawing) { 
+            return
+        }
+        drawing = false
+        drawLine(current.x, current.y, e.clientX, e.clientY, current.color)
+    }
+
+    function onMouseMove(e) {
+        if(!drawing) { 
+            return
+        }
+        drawLine(current.x, current.y, e.clientX, e.clientY, current.color)
+        current.x = e.clientX
+        current.y = e.clientY
+    }
+
+    function onResize() {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+    }
+
+    canvas.addEventListener('mousedown', onMouseDown)
+    canvas.addEventListener('mouseup', onMouseUp)
+    canvas.addEventListener('mouseout', onMouseUp)
+    canvas.addEventListener('mousemove', onMouseMove)
+
+    window.addEventListener('resize', onResize)
+    onResize()
 })
